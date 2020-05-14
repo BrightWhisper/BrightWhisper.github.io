@@ -6,18 +6,20 @@
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <link rel="dns-prefetch" href="http://yoursite.com">
-  <title>Archives: 2019/1 | 時の光</title>
+  <title>合并数据流 | 時の光</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="一个关于技术和杂学的车祸现场">
-<meta property="og:type" content="website">
-<meta property="og:title" content="時の光">
-<meta property="og:url" content="http://yoursite.com/archives/2019/01/index.html">
+  <meta name="description" content="合并类操作符合并类的操作符都有多个Observable对象作为数据来源，把不同来源的数据根据不同的规则合并到一个Observable对象中。 concatconcat是concatnate的缩写，意思就是”连锁”。Observable的concat方法和数组类似，能够把多个Observable里面的内容依次合并 1234const source1$ = of(1, 2, 3);const sour">
+<meta name="keywords" content="rxjs">
+<meta property="og:type" content="article">
+<meta property="og:title" content="合并数据流">
+<meta property="og:url" content="http://yoursite.com/2020/05/14/合并数据流/index.html">
 <meta property="og:site_name" content="時の光">
-<meta property="og:description" content="一个关于技术和杂学的车祸现场">
+<meta property="og:description" content="合并类操作符合并类的操作符都有多个Observable对象作为数据来源，把不同来源的数据根据不同的规则合并到一个Observable对象中。 concatconcat是concatnate的缩写，意思就是”连锁”。Observable的concat方法和数组类似，能够把多个Observable里面的内容依次合并 1234const source1$ = of(1, 2, 3);const sour">
 <meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2020-05-14T10:05:35.744Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="時の光">
-<meta name="twitter:description" content="一个关于技术和杂学的车祸现场">
+<meta name="twitter:title" content="合并数据流">
+<meta name="twitter:description" content="合并类操作符合并类的操作符都有多个Observable对象作为数据来源，把不同来源的数据根据不同的规则合并到一个Observable对象中。 concatconcat是concatnate的缩写，意思就是”连锁”。Observable的concat方法和数组类似，能够把多个Observable里面的内容依次合并 1234const source1$ = of(1, 2, 3);const sour">
   
     <link rel="alternative" href="/atom.xml" title="時の光" type="application/atom+xml">
   
@@ -135,139 +137,139 @@
             <canvas data-colors="#eaeaea" data-sectionHeight="100" data-contentId="js-content" id="myCanvas1" class="anm-canvas"></canvas>
           </div>
           <div id="js-content" class="content-ll">
-            
-  
-  
+            <article id="post-合并数据流" class="article article-type-post " itemscope="" itemprop="blogPost">
+  <div class="article-inner">
     
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      合并数据流
+    </h1>
+  
+
+        
+        <a href="/2020/05/14/合并数据流/" class="archive-article-date">
+  	<time datetime="2020-05-14T07:18:15.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-05-14</time>
+</a>
+        
+      </header>
     
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="合并类操作符"><a href="#合并类操作符" class="headerlink" title="合并类操作符"></a>合并类操作符</h1><p>合并类的操作符都有多个Observable对象作为数据来源，把不同来源的数据根据不同的规则合并到一个Observable对象中。</p>
+<h2 id="concat"><a href="#concat" class="headerlink" title="concat"></a>concat</h2><p>concat是concatnate的缩写，意思就是”连锁”。Observable的concat方法和数组类似，能够把多个Observable里面的内容依次合并</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> source1$ = <span class="keyword">of</span>(<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>);</span><br><span class="line"><span class="keyword">const</span> source2$ = <span class="keyword">of</span>(<span class="number">4</span>, <span class="number">5</span>, <span class="number">6</span>);</span><br><span class="line"><span class="keyword">const</span> source3$ = concat(source1$, source2$);</span><br><span class="line">source3$.subscribe(<span class="built_in">console</span>.log);</span><br></pre></td></tr></table></figure>
+<p>concat的原理是source1$完结的时候调用source1$.unsubscribe,然后调用source2$.subscribe，继续把数据输送给下游</p>
+<p>这里需要注意的是用concat操作符的Observable对象应该都是能够完结的，如果一个对象永远不能完结，那排在它后面的Observable就永远没有上场的机会，比如concat interval(1000)和of(1)。</p>
+<h2 id="merge"><a href="#merge" class="headerlink" title="merge"></a>merge</h2><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> source1$ = timer(<span class="number">0</span>, <span class="number">1000</span>).pipe(map(<span class="function"><span class="params">x</span> =&gt;</span> x + <span class="string">'A'</span>));</span><br><span class="line"><span class="keyword">const</span> source2$ = timer(<span class="number">500</span>, <span class="number">1000</span>).pipe(map(<span class="function"><span class="params">x</span> =&gt;</span> x + <span class="string">'B'</span>));</span><br><span class="line"><span class="keyword">const</span> source3$ = merge(source1$, source2$);</span><br><span class="line">source3$.subscribe(<span class="built_in">console</span>.log);</span><br></pre></td></tr></table></figure>
+<p>merge与concat是一种完全不同的合并策略，以上代码的输出结果是0A,0B,1A,1B这个样子，merge操作符会第一时间订阅上游的所有Observable，任何一个Observable只要有数据推下来，就立刻转给下游的Observable对象。</p>
+<p>因为能够在第一时间订阅所有的Observable对象，所有某个对象不能完结是不影响另一个对象的。</p>
+<p>一般来说merge只对产生异步数据的Observable才有意义，用merge合并同步对象是没有意义的，比如merge of(1,2,3)和of(4,5,6),最后的输出就是1,2,3,4,5,6。因为merge会一次订阅上游的Observable对象，把数据传递给下游，等待所有上游对象Observable完结。</p>
+<p>merge还有一个可选参数concurrent,用于指定可以合并的Observable对象个数<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> source1$ = timer(<span class="number">0</span>, <span class="number">1000</span>).pipe(map(<span class="function"><span class="params">x</span> =&gt;</span> x + <span class="string">'A'</span>));</span><br><span class="line"><span class="keyword">const</span> source2$ = timer(<span class="number">500</span>, <span class="number">1000</span>).pipe(map(<span class="function"><span class="params">x</span> =&gt;</span> x + <span class="string">'B'</span>));</span><br><span class="line"><span class="keyword">const</span> source3$ = timer(<span class="number">750</span>, <span class="number">1000</span>).pipe(map(<span class="function"><span class="params">x</span> =&gt;</span> x + <span class="string">'C'</span>));</span><br><span class="line"><span class="keyword">const</span> source4$ = merge(source1$, source2$, source3$, <span class="number">2</span>);</span><br></pre></td></tr></table></figure></p>
+<p>这里的2限定了同时只能同步合并两个Observable对象的数据，source1$和source2$排在前，所以优先合并他们两个，只有这两个对象的其中之一完结的时候，才能空出名额合并source3$</p>
+<h3 id="merge的应用"><a href="#merge的应用" class="headerlink" title="merge的应用"></a>merge的应用</h3><p>fromEvent可以从网页中获取事件，可是一次只能从一个DOM元素获取一种事件类型，假如我们想关心某元素的click事件和touchend事件，就需要用merge<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> click$ = fromEvent(element, <span class="string">'click'</span>);</span><br><span class="line"><span class="keyword">const</span> touchend$ = fromEvent(element, <span class="string">'touchend'</span>);</span><br><span class="line">merge(click$, touchend$).subscribe(eventHandler)</span><br></pre></td></tr></table></figure></p>
+<p>这样就能够用同样的行为处理click和touchend事件了</p>
+<h2 id="zip"><a href="#zip" class="headerlink" title="zip"></a>zip</h2><p>zip是拉链的意思，它的作用就是将数据一一对应起来。</p>
+<h3 id="一对一合并"><a href="#一对一合并" class="headerlink" title="一对一合并"></a>一对一合并</h3><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> source$<span class="number">1</span> = <span class="keyword">of</span>(<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>);</span><br><span class="line"><span class="keyword">const</span> source$<span class="number">2</span> = <span class="keyword">of</span>(<span class="number">4</span>, <span class="number">5</span>, <span class="number">6</span>);</span><br><span class="line"><span class="keyword">const</span> zipped$ = zip(source$<span class="number">1</span>, source$<span class="number">2</span>);</span><br><span class="line">zipped$.subscribe(<span class="built_in">console</span>.log);</span><br></pre></td></tr></table></figure>
+<p>上述代码的结果是[1,4],[2,5],[3,6]。<br>zip会立即订阅上游的所有Observable，然后开始合并数据。<br>上面是一个同步的例子，如果是异步数据又会如何？<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> source1$ = interval(<span class="number">1000</span>);</span><br><span class="line"><span class="keyword">const</span> source2$ = <span class="keyword">of</span>(<span class="string">'a'</span>, <span class="string">'b'</span>, <span class="string">'c'</span>);</span><br></pre></td></tr></table></figure></p>
+<p>上述代码的结果是[0,a],[1,b],[2,c]，而且每隔一秒输出一次</p>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
       
       
-      <section class="archives-wrap">
-        <div class="archive-year-wrap">
-          <a href="/archives/2019" class="archive-year">2019</a>
-        </div>
-        <div class="archives">
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2019/01/26/HTTP初探/" class="archive-article-date">
-  	<time datetime="2019-01-26T02:36:01.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-01-26</time>
-</a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2019/01/26/HTTP初探/">HTTP初探</a>
-    </h1>
-  
-
-        <div class="article-info info-on-right">
-          
 	<div class="article-tag tagcloud">
 		<i class="icon-price-tags icon"></i>
 		<ul class="article-tag-list">
 			 
         		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">基础知识</a>
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">rxjs</a>
         		</li>
       		
 		</ul>
 	</div>
 
-          
+      
 
-        </div>
-        <div class="clearfix"></div>
-    </header>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
   </div>
 </article>
+
   
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2019/01/19/JS里的数据类型转换/" class="archive-article-date">
-  	<time datetime="2019-01-19T02:36:01.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-01-19</time>
-</a>
+<nav id="article-nav">
+  
+  
+    <a href="/2020/05/11/创建数据流/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">创建数据流</div>
+      <i class="icon-circle-right"></i>
+    </a>
+  
+</nav>
+
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
         </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2019/01/19/JS里的数据类型转换/">JS里的数据类型转换</a>
-    </h1>
-  
-
-        <div class="article-info info-on-right">
-          
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">JS</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-          
-
+        
+        
+        <div class="toc-container tooltip-left">
+            <i class="icon-font icon-category"></i>
+            <div class="tooltip tooltip-east">
+                <span class="tooltip-item">
+                </span>
+                <span class="tooltip-content">
+                    <div class="toc-article">
+                    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#合并类操作符"><span class="toc-number">1.</span> <span class="toc-text">合并类操作符</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#concat"><span class="toc-number">1.1.</span> <span class="toc-text">concat</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#merge"><span class="toc-number">1.2.</span> <span class="toc-text">merge</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#merge的应用"><span class="toc-number">1.2.1.</span> <span class="toc-text">merge的应用</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#zip"><span class="toc-number">1.3.</span> <span class="toc-text">zip</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#一对一合并"><span class="toc-number">1.3.1.</span> <span class="toc-text">一对一合并</span></a></li></ol></li></ol></li></ol>
+                    </div>
+                </span>
+            </div>
         </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
+        
+    </div>
+</aside>
+
+
+
   
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2019/01/17/CSS初探/" class="archive-article-date">
-  	<time datetime="2019-01-17T07:29:07.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-01-17</time>
-</a>
-        </div>
-    	 
   
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2019/01/17/CSS初探/">CSS初探</a>
-    </h1>
   
 
-        <div class="article-info info-on-right">
-          
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">CSS</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-          
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-  
-    </div></section>
   
 
-    
-    <nav id="page-nav">
-      <span class="page-number current">1</span><a class="page-number" href="/archives/2019/01/page/2/">2</a><a class="extend next" rel="next" href="/archives/2019/01/page/2/">Next &raquo;</a>
-    </nav>
+  
+
+  
+  <div id="gitment-ctn"></div> 
+<link rel="stylesheet" href="https://billts.site/extra_css/gitment.css">
+<script src="https://billts.site/js/gitment.js"></script>
+<script>
+var gitment = new Gitment({
+  id: "http://yoursite.com/2020/05/14/合并数据流/",
+  owner: 'BrightWhisper',
+  repo: 'comment-repo',
+  oauth: {
+    client_id: '91e7f65ae53da746ec14',
+    client_secret: 'c9bf019571895217e37397e70697219fdc658be3',
+  },
+})
+gitment.render('gitment-ctn')
+</script>
   
 
 
@@ -291,8 +293,8 @@
 	var yiliaConfig = {
 		mathjax: false,
 		isHome: false,
-		isPost: false,
-		isArchive: true,
+		isPost: true,
+		isArchive: false,
 		isTag: false,
 		isCategory: false,
 		open_in_new: false,

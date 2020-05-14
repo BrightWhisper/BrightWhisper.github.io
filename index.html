@@ -137,6 +137,92 @@
           <div id="js-content" class="content-ll">
             
   
+    <article id="post-合并数据流" class="article article-type-post  article-index" itemscope="" itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2020/05/14/合并数据流/">合并数据流</a>
+    </h1>
+  
+
+        
+        <a href="/2020/05/14/合并数据流/" class="archive-article-date">
+  	<time datetime="2020-05-14T07:18:15.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-05-14</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="合并类操作符"><a href="#合并类操作符" class="headerlink" title="合并类操作符"></a>合并类操作符</h1><p>合并类的操作符都有多个Observable对象作为数据来源，把不同来源的数据根据不同的规则合并到一个Observable对象中。</p>
+<h2 id="concat"><a href="#concat" class="headerlink" title="concat"></a>concat</h2><p>concat是concatnate的缩写，意思就是”连锁”。Observable的concat方法和数组类似，能够把多个Observable里面的内容依次合并</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> source1$ = <span class="keyword">of</span>(<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>);</span><br><span class="line"><span class="keyword">const</span> source2$ = <span class="keyword">of</span>(<span class="number">4</span>, <span class="number">5</span>, <span class="number">6</span>);</span><br><span class="line"><span class="keyword">const</span> source3$ = concat(source1$, source2$);</span><br><span class="line">source3$.subscribe(<span class="built_in">console</span>.log);</span><br></pre></td></tr></table></figure>
+<p>concat的原理是source1$完结的时候调用source1$.unsubscribe,然后调用source2$.subscribe，继续把数据输送给下游</p>
+<p>这里需要注意的是用concat操作符的Observable对象应该都是能够完结的，如果一个对象永远不能完结，那排在它后面的Observable就永远没有上场的机会，比如concat interval(1000)和of(1)。</p>
+<h2 id="merge"><a href="#merge" class="headerlink" title="merge"></a>merge</h2><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> source1$ = timer(<span class="number">0</span>, <span class="number">1000</span>).pipe(map(<span class="function"><span class="params">x</span> =&gt;</span> x + <span class="string">'A'</span>));</span><br><span class="line"><span class="keyword">const</span> source2$ = timer(<span class="number">500</span>, <span class="number">1000</span>).pipe(map(<span class="function"><span class="params">x</span> =&gt;</span> x + <span class="string">'B'</span>));</span><br><span class="line"><span class="keyword">const</span> source3$ = merge(source1$, source2$);</span><br><span class="line">source3$.subscribe(<span class="built_in">console</span>.log);</span><br></pre></td></tr></table></figure>
+<p>merge与concat是一种完全不同的合并策略，以上代码的输出结果是0A,0B,1A,1B这个样子，merge操作符会第一时间订阅上游的所有Observable，任何一个Observable只要有数据推下来，就立刻转给下游的Observable对象。</p>
+<p>因为能够在第一时间订阅所有的Observable对象，所有某个对象不能完结是不影响另一个对象的。</p>
+<p>一般来说merge只对产生异步数据的Observable才有意义，用merge合并同步对象是没有意义的，比如merge of(1,2,3)和of(4,5,6),最后的输出就是1,2,3,4,5,6。因为merge会一次订阅上游的Observable对象，把数据传递给下游，等待所有上游对象Observable完结。</p>
+<p>merge还有一个可选参数concurrent,用于指定可以合并的Observable对象个数<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> source1$ = timer(<span class="number">0</span>, <span class="number">1000</span>).pipe(map(<span class="function"><span class="params">x</span> =&gt;</span> x + <span class="string">'A'</span>));</span><br><span class="line"><span class="keyword">const</span> source2$ = timer(<span class="number">500</span>, <span class="number">1000</span>).pipe(map(<span class="function"><span class="params">x</span> =&gt;</span> x + <span class="string">'B'</span>));</span><br><span class="line"><span class="keyword">const</span> source3$ = timer(<span class="number">750</span>, <span class="number">1000</span>).pipe(map(<span class="function"><span class="params">x</span> =&gt;</span> x + <span class="string">'C'</span>));</span><br><span class="line"><span class="keyword">const</span> source4$ = merge(source1$, source2$, source3$, <span class="number">2</span>);</span><br></pre></td></tr></table></figure></p>
+<p>这里的2限定了同时只能同步合并两个Observable对象的数据，source1$和source2$排在前，所以优先合并他们两个，只有这两个对象的其中之一完结的时候，才能空出名额合并source3$</p>
+<h3 id="merge的应用"><a href="#merge的应用" class="headerlink" title="merge的应用"></a>merge的应用</h3><p>fromEvent可以从网页中获取事件，可是一次只能从一个DOM元素获取一种事件类型，假如我们想关心某元素的click事件和touchend事件，就需要用merge<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> click$ = fromEvent(element, <span class="string">'click'</span>);</span><br><span class="line"><span class="keyword">const</span> touchend$ = fromEvent(element, <span class="string">'touchend'</span>);</span><br><span class="line">merge(click$, touchend$).subscribe(eventHandler)</span><br></pre></td></tr></table></figure></p>
+<p>这样就能够用同样的行为处理click和touchend事件了</p>
+<h2 id="zip"><a href="#zip" class="headerlink" title="zip"></a>zip</h2><p>zip是拉链的意思，它的作用就是将数据一一对应起来。</p>
+<h3 id="一对一合并"><a href="#一对一合并" class="headerlink" title="一对一合并"></a>一对一合并</h3><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> source$<span class="number">1</span> = <span class="keyword">of</span>(<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>);</span><br><span class="line"><span class="keyword">const</span> source$<span class="number">2</span> = <span class="keyword">of</span>(<span class="number">4</span>, <span class="number">5</span>, <span class="number">6</span>);</span><br><span class="line"><span class="keyword">const</span> zipped$ = zip(source$<span class="number">1</span>, source$<span class="number">2</span>);</span><br><span class="line">zipped$.subscribe(<span class="built_in">console</span>.log);</span><br></pre></td></tr></table></figure>
+<p>上述代码的结果是[1,4],[2,5],[3,6]。<br>zip会立即订阅上游的所有Observable，然后开始合并数据。<br>上面是一个同步的例子，如果是异步数据又会如何？<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> source1$ = interval(<span class="number">1000</span>);</span><br><span class="line"><span class="keyword">const</span> source2$ = <span class="keyword">of</span>(<span class="string">'a'</span>, <span class="string">'b'</span>, <span class="string">'c'</span>);</span><br></pre></td></tr></table></figure></p>
+<p>上述代码的结果是[0,a],[1,b],[2,c]，而且每隔一秒输出一次</p>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">rxjs</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
     <article id="post-创建数据流" class="article article-type-post  article-index" itemscope="" itemprop="blogPost">
   <div class="article-inner">
     
@@ -492,81 +578,6 @@
 
 
   
-    <article id="post-数据结构-递归" class="article article-type-post  article-index" itemscope="" itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2019/05/31/数据结构-递归/">数据结构-递归</a>
-    </h1>
-  
-
-        
-        <a href="/2019/05/31/数据结构-递归/" class="archive-article-date">
-  	<time datetime="2019-05-31T07:07:18.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-05-31</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h1 id="递归"><a href="#递归" class="headerlink" title="递归"></a>递归</h1><p>emmmmm…要理解递归，首先要理解递归。</p>
-<p>递归是一种解决问题的方法，它从解决问题的各个小部分开始，直到解决最初的大问题。递归通常涉及函数调用自身。</p>
-<p>递归函数即是能够直接或间接调用自身的函数</p>
-<p>每个递归应该有自己的基线条件，就是一个不再递归调用的条件，防止无限递归</p>
-        
-          <a class="article-more-a" href="/2019/05/31/数据结构-递归/#more">more >></a>
-        
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">数据结构</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
   
     <nav id="page-nav">
       <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="page-number" href="/page/3/">3</a><span class="space">&hellip;</span><a class="page-number" href="/page/6/">6</a><a class="extend next" rel="next" href="/page/2/">Next &raquo;</a>
@@ -672,15 +683,15 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">基础知识</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">JS</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">md</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">基础知识</a>
               </li>
              
               <li class="article-tag-list-item">
