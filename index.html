@@ -137,6 +137,98 @@
           <div id="js-content" class="content-ll">
             
   
+    <article id="post-使用hugo搭建个人博客网站" class="article article-type-post  article-index" itemscope="" itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2020/05/15/使用hugo搭建个人博客网站/">使用hugo搭建个人博客网站</a>
+    </h1>
+  
+
+        
+        <a href="/2020/05/15/使用hugo搭建个人博客网站/" class="archive-article-date">
+  	<time datetime="2020-05-15T02:18:02.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-05-15</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>其实这篇博客依然是写在hexo上的，hugo的流程走了一遍，但因为扫了一遍hugo的主题感觉没有现在hexo的好。所以还是用hexo写了，也许之后会学习各种大佬把在用的hexo主题迁移到hugo吧。下面主要介绍一下用Hugo搭建个人博客的过程。</p>
+<h2 id="Hugo简介"><a href="#Hugo简介" class="headerlink" title="Hugo简介"></a>Hugo简介</h2><p>Hugo是由Go语言实现的静态网站生成器。简单、易用、高效、易扩展、快速部署。和hexo相比，它的部署速度真的飞快，而且依赖项要少的多。体验很棒。</p>
+<h2 id="安装"><a href="#安装" class="headerlink" title="安装"></a>安装</h2><p>从<a href="https://github.com/gohugoio/hugo/releases" target="_blank" rel="noopener">这里</a>下载hugo_xxx_Windows-64bit.zip 将它解压到一个单独的目录，然后把这个目录添加到环境变量PATH中，重启终端，运行hugo version，正确展示了版本号就说明安装成功了。</p>
+<h2 id="搭建博客"><a href="#搭建博客" class="headerlink" title="搭建博客"></a>搭建博客</h2><p>用hugo搭建博客的方式非常简单，顺次执行以下代码即可<br>1.创建一个新项目<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">hugo new site quickstart</span><br></pre></td></tr></table></figure></p>
+<p>2.添加主题</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">cd</span> quickstart</span><br><span class="line">git init</span><br><span class="line">git submodule add https://github.com/budparr/gohugo-theme-ananke.git themes/ananke</span><br><span class="line"></span><br><span class="line"><span class="built_in">echo</span> <span class="string">'theme = "ananke"'</span> &gt;&gt; config.toml</span><br></pre></td></tr></table></figure>
+<p>3.创建一篇博客</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">hugo new posts/my-first-post.md</span><br></pre></td></tr></table></figure>
+<p>4.开启 Hugo Serve，用于本地预览</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">hugo server -D</span><br></pre></td></tr></table></figure>
+<p>5.修改config.toml</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">baseURL = <span class="string">"https://example.org/"</span></span><br><span class="line">languageCode = <span class="string">"en-us"</span></span><br><span class="line">title = <span class="string">"My New Hugo Site"</span></span><br><span class="line">theme = <span class="string">"ananke"</span></span><br></pre></td></tr></table></figure>
+<ul>
+<li>baseURL 改成你的博客主页地址</li>
+<li>languageCode 如果是中文博客，可以改成zh-CN</li>
+<li>title 即博客名称</li>
+<li>theme就是你当前使用主题的名称。</li>
+</ul>
+<p>6.构建静态页</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">hugo -D</span><br></pre></td></tr></table></figure>
+<p>这个命令执行以后会生成一个./public的目录，将这个目录上传到GitHub,注意仓库的名称<code>必须</code>是<code>你的github账号名.github.io</code>。之后配置git pages即可。</p>
+<h2 id="关于主题"><a href="#关于主题" class="headerlink" title="关于主题"></a>关于主题</h2><p>可以从<a href="https://themes.gohugo.io/" target="_blank" rel="noopener">这里</a>寻找自己喜欢的主题，也可以搜索hugo主题看看网友们有什么推荐，主题的使用方法最好是去查看相应主题的github仓库的.md，因为有些主题是网友们定制过的，其中某些配置项和目录结构可能会和上面步骤描述的不一样。大家需要灵活对待。</p>
+<p>挑主题是个无底洞，建议大家如果不是很有时间就凑活用默认的吧，毕竟博客这个东西，传播知识才是它的主要价值。</p>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">hugo</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
     <article id="post-合并数据流" class="article article-type-post  article-index" itemscope="" itemprop="blogPost">
   <div class="article-inner">
     
@@ -497,87 +589,6 @@
 
 
   
-    <article id="post-数据结构-树" class="article article-type-post  article-index" itemscope="" itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2019/05/31/数据结构-树/">数据结构-树</a>
-    </h1>
-  
-
-        
-        <a href="/2019/05/31/数据结构-树/" class="archive-article-date">
-  	<time datetime="2019-05-31T09:29:51.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-05-31</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h1 id="树"><a href="#树" class="headerlink" title="树"></a>树</h1><p>树是一种分层数据的抽象模型，是一种非顺序的数据结构，家谱就是典型的树的例子。</p>
-<h2 id="树的相关术语"><a href="#树的相关术语" class="headerlink" title="树的相关术语"></a>树的相关术语</h2><p>一个树结构包含一系列存在父子关系的节点。</p>
-<ul>
-<li>树顶部的节点叫做<strong>根节点</strong>。树中的每个元素都叫做<strong>节点</strong>，节点分为<strong>内部节点</strong>和<strong>外部节点</strong></li>
-<li>至少有一个子节点的节点被称为<strong>内部节点</strong>，没有子节点的节点被称为<strong>外部节点</strong>或<strong>叶节点</strong></li>
-<li>一个节点可以有<strong>祖先</strong>和<strong>后代</strong>。祖先包括了父节点，祖父节点等等。后代包括了子节点，孙子节点等等。</li>
-<li><strong>子树</strong>由节点和它的后代构成</li>
-<li>节点的一个属性叫做<strong>深度</strong>，节点的深度取决于它的祖先节点的数量，祖先节点有几个，它就属于第几层。</li>
-<li>树的高度取决于所有节点深度的最大值。一棵树也可以被分解为<strong>层级</strong>。根节点在第0层。</li>
-</ul>
-        
-          <a class="article-more-a" href="/2019/05/31/数据结构-树/#more">more >></a>
-        
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">数据结构</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
   
     <nav id="page-nav">
       <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="page-number" href="/page/3/">3</a><span class="space">&hellip;</span><a class="page-number" href="/page/6/">6</a><a class="extend next" rel="next" href="/page/2/">Next &raquo;</a>
@@ -671,11 +682,11 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">Docker</a>
+                <a href="javascript:void(0)" class="js-tag color4">elk</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">elk</a>
+                <a href="javascript:void(0)" class="js-tag color2">Docker</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -691,11 +702,15 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">RxJS</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">md</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">RxJS</a>
+                <a href="javascript:void(0)" class="js-tag color5">hugo</a>
               </li>
              
               <li class="article-tag-list-item">

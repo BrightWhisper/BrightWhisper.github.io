@@ -6,18 +6,20 @@
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <link rel="dns-prefetch" href="http://yoursite.com">
-  <title>Archives: 2019 | 時の光</title>
+  <title>使用hugo搭建个人博客网站 | 時の光</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="一个关于技术和杂学的车祸现场">
-<meta property="og:type" content="website">
-<meta property="og:title" content="時の光">
-<meta property="og:url" content="http://yoursite.com/archives/2019/page/5/index.html">
+  <meta name="description" content="前言其实这篇博客依然是写在hexo上的，hugo的流程走了一遍，但因为扫了一遍hugo的主题感觉没有现在hexo的好。所以还是用hexo写了，也许之后会学习各种大佬把在用的hexo主题迁移到hugo吧。下面主要介绍一下用Hugo搭建个人博客的过程。 Hugo简介Hugo是由Go语言实现的静态网站生成器。简单、易用、高效、易扩展、快速部署。和hexo相比，它的部署速度真的飞快，而且依赖项要少的多。体">
+<meta name="keywords" content="hugo">
+<meta property="og:type" content="article">
+<meta property="og:title" content="使用hugo搭建个人博客网站">
+<meta property="og:url" content="http://yoursite.com/2020/05/15/使用hugo搭建个人博客网站/index.html">
 <meta property="og:site_name" content="時の光">
-<meta property="og:description" content="一个关于技术和杂学的车祸现场">
+<meta property="og:description" content="前言其实这篇博客依然是写在hexo上的，hugo的流程走了一遍，但因为扫了一遍hugo的主题感觉没有现在hexo的好。所以还是用hexo写了，也许之后会学习各种大佬把在用的hexo主题迁移到hugo吧。下面主要介绍一下用Hugo搭建个人博客的过程。 Hugo简介Hugo是由Go语言实现的静态网站生成器。简单、易用、高效、易扩展、快速部署。和hexo相比，它的部署速度真的飞快，而且依赖项要少的多。体">
 <meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2020-05-15T02:38:13.092Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="時の光">
-<meta name="twitter:description" content="一个关于技术和杂学的车祸现场">
+<meta name="twitter:title" content="使用hugo搭建个人博客网站">
+<meta name="twitter:description" content="前言其实这篇博客依然是写在hexo上的，hugo的流程走了一遍，但因为扫了一遍hugo的主题感觉没有现在hexo的好。所以还是用hexo写了，也许之后会学习各种大佬把在用的hexo主题迁移到hugo吧。下面主要介绍一下用Hugo搭建个人博客的过程。 Hugo简介Hugo是由Go语言实现的静态网站生成器。简单、易用、高效、易扩展、快速部署。和hexo相比，它的部署速度真的飞快，而且依赖项要少的多。体">
   
     <link rel="alternative" href="/atom.xml" title="時の光" type="application/atom+xml">
   
@@ -135,139 +137,145 @@
             <canvas data-colors="#eaeaea" data-sectionHeight="100" data-contentId="js-content" id="myCanvas1" class="anm-canvas"></canvas>
           </div>
           <div id="js-content" class="content-ll">
-            
-  
-  
+            <article id="post-使用hugo搭建个人博客网站" class="article article-type-post " itemscope="" itemprop="blogPost">
+  <div class="article-inner">
     
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      使用hugo搭建个人博客网站
+    </h1>
+  
+
+        
+        <a href="/2020/05/15/使用hugo搭建个人博客网站/" class="archive-article-date">
+  	<time datetime="2020-05-15T02:18:02.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-05-15</time>
+</a>
+        
+      </header>
     
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>其实这篇博客依然是写在hexo上的，hugo的流程走了一遍，但因为扫了一遍hugo的主题感觉没有现在hexo的好。所以还是用hexo写了，也许之后会学习各种大佬把在用的hexo主题迁移到hugo吧。下面主要介绍一下用Hugo搭建个人博客的过程。</p>
+<h2 id="Hugo简介"><a href="#Hugo简介" class="headerlink" title="Hugo简介"></a>Hugo简介</h2><p>Hugo是由Go语言实现的静态网站生成器。简单、易用、高效、易扩展、快速部署。和hexo相比，它的部署速度真的飞快，而且依赖项要少的多。体验很棒。</p>
+<h2 id="安装"><a href="#安装" class="headerlink" title="安装"></a>安装</h2><p>从<a href="https://github.com/gohugoio/hugo/releases" target="_blank" rel="noopener">这里</a>下载hugo_xxx_Windows-64bit.zip 将它解压到一个单独的目录，然后把这个目录添加到环境变量PATH中，重启终端，运行hugo version，正确展示了版本号就说明安装成功了。</p>
+<h2 id="搭建博客"><a href="#搭建博客" class="headerlink" title="搭建博客"></a>搭建博客</h2><p>用hugo搭建博客的方式非常简单，顺次执行以下代码即可<br>1.创建一个新项目<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">hugo new site quickstart</span><br></pre></td></tr></table></figure></p>
+<p>2.添加主题</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">cd</span> quickstart</span><br><span class="line">git init</span><br><span class="line">git submodule add https://github.com/budparr/gohugo-theme-ananke.git themes/ananke</span><br><span class="line"></span><br><span class="line"><span class="built_in">echo</span> <span class="string">'theme = "ananke"'</span> &gt;&gt; config.toml</span><br></pre></td></tr></table></figure>
+<p>3.创建一篇博客</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">hugo new posts/my-first-post.md</span><br></pre></td></tr></table></figure>
+<p>4.开启 Hugo Serve，用于本地预览</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">hugo server -D</span><br></pre></td></tr></table></figure>
+<p>5.修改config.toml</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">baseURL = <span class="string">"https://example.org/"</span></span><br><span class="line">languageCode = <span class="string">"en-us"</span></span><br><span class="line">title = <span class="string">"My New Hugo Site"</span></span><br><span class="line">theme = <span class="string">"ananke"</span></span><br></pre></td></tr></table></figure>
+<ul>
+<li>baseURL 改成你的博客主页地址</li>
+<li>languageCode 如果是中文博客，可以改成zh-CN</li>
+<li>title 即博客名称</li>
+<li>theme就是你当前使用主题的名称。</li>
+</ul>
+<p>6.构建静态页</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">hugo -D</span><br></pre></td></tr></table></figure>
+<p>这个命令执行以后会生成一个./public的目录，将这个目录上传到GitHub,注意仓库的名称<code>必须</code>是<code>你的github账号名.github.io</code>。之后配置git pages即可。</p>
+<h2 id="关于主题"><a href="#关于主题" class="headerlink" title="关于主题"></a>关于主题</h2><p>可以从<a href="https://themes.gohugo.io/" target="_blank" rel="noopener">这里</a>寻找自己喜欢的主题，也可以搜索hugo主题看看网友们有什么推荐，主题的使用方法最好是去查看相应主题的github仓库的.md，因为有些主题是网友们定制过的，其中某些配置项和目录结构可能会和上面步骤描述的不一样。大家需要灵活对待。</p>
+<p>挑主题是个无底洞，建议大家如果不是很有时间就凑活用默认的吧，毕竟博客这个东西，传播知识才是它的主要价值。</p>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
       
       
-      <section class="archives-wrap">
-        <div class="archive-year-wrap">
-          <a href="/archives/2019" class="archive-year">2019</a>
-        </div>
-        <div class="archives">
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2019/03/16/ES-Query-DSL示例/" class="archive-article-date">
-  	<time datetime="2019-03-16T08:13:54.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-03-16</time>
-</a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2019/03/16/ES-Query-DSL示例/">ES-Query-DSL示例</a>
-    </h1>
-  
-
-        <div class="article-info info-on-right">
-          
 	<div class="article-tag tagcloud">
 		<i class="icon-price-tags icon"></i>
 		<ul class="article-tag-list">
 			 
         		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">elk</a>
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">hugo</a>
         		</li>
       		
 		</ul>
 	</div>
 
-          
+      
 
-        </div>
-        <div class="clearfix"></div>
-    </header>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
   </div>
 </article>
+
   
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2019/03/09/ES-API/" class="archive-article-date">
-  	<time datetime="2019-03-09T07:56:30.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-03-09</time>
-</a>
+<nav id="article-nav">
+  
+  
+    <a href="/2020/05/14/合并数据流/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">合并数据流</div>
+      <i class="icon-circle-right"></i>
+    </a>
+  
+</nav>
+
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
         </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2019/03/09/ES-API/">ES-API</a>
-    </h1>
-  
-
-        <div class="article-info info-on-right">
-          
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">elk</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-          
-
+        
+        
+        <div class="toc-container tooltip-left">
+            <i class="icon-font icon-category"></i>
+            <div class="tooltip tooltip-east">
+                <span class="tooltip-item">
+                </span>
+                <span class="tooltip-content">
+                    <div class="toc-article">
+                    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#前言"><span class="toc-number">1.</span> <span class="toc-text">前言</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Hugo简介"><span class="toc-number">2.</span> <span class="toc-text">Hugo简介</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#安装"><span class="toc-number">3.</span> <span class="toc-text">安装</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#搭建博客"><span class="toc-number">4.</span> <span class="toc-text">搭建博客</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#关于主题"><span class="toc-number">5.</span> <span class="toc-text">关于主题</span></a></li></ol>
+                    </div>
+                </span>
+            </div>
         </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
+        
+    </div>
+</aside>
+
+
+
   
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2019/03/01/elsticsearch开端/" class="archive-article-date">
-  	<time datetime="2019-03-01T02:54:28.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-03-01</time>
-</a>
-        </div>
-    	 
   
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2019/03/01/elsticsearch开端/">elsticsearch开端</a>
-    </h1>
   
 
-        <div class="article-info info-on-right">
-          
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">elk</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-          
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-  
-    </div></section>
   
 
-    
-    <nav id="page-nav">
-      <a class="extend prev" rel="prev" href="/archives/2019/page/4/">&laquo; Prev</a><a class="page-number" href="/archives/2019/">1</a><span class="space">&hellip;</span><a class="page-number" href="/archives/2019/page/3/">3</a><a class="page-number" href="/archives/2019/page/4/">4</a><span class="page-number current">5</span><a class="page-number" href="/archives/2019/page/6/">6</a><a class="page-number" href="/archives/2019/page/7/">7</a><span class="space">&hellip;</span><a class="page-number" href="/archives/2019/page/9/">9</a><a class="extend next" rel="next" href="/archives/2019/page/6/">Next &raquo;</a>
-    </nav>
+  
+
+  
+  <div id="gitment-ctn"></div> 
+<link rel="stylesheet" href="https://billts.site/extra_css/gitment.css">
+<script src="https://billts.site/js/gitment.js"></script>
+<script>
+var gitment = new Gitment({
+  id: "http://yoursite.com/2020/05/15/使用hugo搭建个人博客网站/",
+  owner: 'BrightWhisper',
+  repo: 'comment-repo',
+  oauth: {
+    client_id: '91e7f65ae53da746ec14',
+    client_secret: 'c9bf019571895217e37397e70697219fdc658be3',
+  },
+})
+gitment.render('gitment-ctn')
+</script>
   
 
 
@@ -291,8 +299,8 @@
 	var yiliaConfig = {
 		mathjax: false,
 		isHome: false,
-		isPost: false,
-		isArchive: true,
+		isPost: true,
+		isArchive: false,
 		isTag: false,
 		isCategory: false,
 		open_in_new: false,
