@@ -16,7 +16,7 @@
 <meta property="og:site_name" content="時の光">
 <meta property="og:description" content="合并类操作符合并类的操作符都有多个Observable对象作为数据来源，把不同来源的数据根据不同的规则合并到一个Observable对象中。 concatconcat是concatnate的缩写，意思就是”连锁”。Observable的concat方法和数组类似，能够把多个Observable里面的内容依次合并 1234const source1$ = of(1, 2, 3);const sour">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2020-05-15T02:44:59.183Z">
+<meta property="og:updated_time" content="2020-05-15T06:00:27.555Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="合并数据流">
 <meta name="twitter:description" content="合并类操作符合并类的操作符都有多个Observable对象作为数据来源，把不同来源的数据根据不同的规则合并到一个Observable对象中。 concatconcat是concatnate的缩写，意思就是”连锁”。Observable的concat方法和数组类似，能够把多个Observable里面的内容依次合并 1234const source1$ = of(1, 2, 3);const sour">
@@ -173,7 +173,7 @@
 <h2 id="zip"><a href="#zip" class="headerlink" title="zip"></a>zip</h2><p>zip是拉链的意思，它的作用就是将数据一一对应起来。</p>
 <h3 id="一对一合并"><a href="#一对一合并" class="headerlink" title="一对一合并"></a>一对一合并</h3><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> source$<span class="number">1</span> = <span class="keyword">of</span>(<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>);</span><br><span class="line"><span class="keyword">const</span> source$<span class="number">2</span> = <span class="keyword">of</span>(<span class="number">4</span>, <span class="number">5</span>, <span class="number">6</span>);</span><br><span class="line"><span class="keyword">const</span> zipped$ = zip(source$<span class="number">1</span>, source$<span class="number">2</span>);</span><br><span class="line">zipped$.subscribe(<span class="built_in">console</span>.log);</span><br></pre></td></tr></table></figure>
 <p>上述代码的结果是[1,4],[2,5],[3,6]。<br>zip会立即订阅上游的所有Observable，然后开始合并数据。<br>上面是一个同步的例子，如果是异步数据又会如何？<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> source1$ = interval(<span class="number">1000</span>);</span><br><span class="line"><span class="keyword">const</span> source2$ = <span class="keyword">of</span>(<span class="string">'a'</span>, <span class="string">'b'</span>, <span class="string">'c'</span>);</span><br></pre></td></tr></table></figure></p>
-<p>上述代码的结果是[0,a],[1,b],[2,c]，而且每隔一秒输出一次。</p>
+<p>上述代码的结果是[0,a],[1,b],[2,c]，而且每隔一秒输出一次</p>
 
       
 
@@ -376,7 +376,7 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">html</a>
+                <a href="javascript:void(0)" class="js-tag color3">JS</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -384,7 +384,7 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">JS</a>
+                <a href="javascript:void(0)" class="js-tag color5">html</a>
               </li>
              
               <li class="article-tag-list-item">
