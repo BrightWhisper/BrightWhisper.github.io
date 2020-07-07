@@ -137,6 +137,78 @@
           <div id="js-content" class="content-ll">
             
   
+    <article id="post-转化数据流" class="article article-type-post  article-index" itemscope="" itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2020/06/24/转化数据流/">转化数据流</a>
+    </h1>
+  
+
+        
+        <a href="/2020/06/24/转化数据流/" class="archive-article-date">
+  	<time datetime="2020-06-23T20:27:35.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-06-24</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>本文会介绍rxjs对于数据的转化处理，也就是让数据管道中的数据发生变化。在rxjs中，过滤类，合并类和转化类的操作符是最常用的。</p>
+        
+          <a class="article-more-a" href="/2020/06/24/转化数据流/#more">more >></a>
+        
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">rxjs</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
     <article id="post-java的包以及maven包管理" class="article article-type-post  article-index" itemscope="" itemprop="blogPost">
   <div class="article-inner">
     
@@ -231,9 +303,9 @@
     <div class="article-entry" itemprop="articleBody">
       
         <h1 id="过滤操作符的模式"><a href="#过滤操作符的模式" class="headerlink" title="过滤操作符的模式"></a>过滤操作符的模式</h1><p>过滤操作符最基本的功能就是对一个给定的数据流中的每个数据判断是否满足某个条件，如果满足条件就可以传递给下游，否则就抛弃掉。</p>
-<p>几乎所有的过滤操作符都有判定函数参数，此外，有的过滤操作符还可以接受一个结果选择器(result selector)。它的作用是定制传给下游的数据，下面是一个”结果选择器”函数的例子</p>
+<p>几乎所有的过滤操作符都有判定函数参数，此外，有的过滤操作符还可以接受一个结果选择器(result selector)。它的作用是定制传给下游的数据，下面是一个”结果选择器”函数的例子。</p>
 <figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">resultSelector</span>(<span class="params">value,index</span>)</span>&#123;</span><br><span class="line">    <span class="keyword">return</span> [value,index];</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>其中value是被选中的上游Observable的值，而index就是这个值在上游Observable中的序号，这个resultSelector只是简单地把value和index组成一个数组返回。如果直接return value就说明没有任何的转化</p>
+<p>其中value是被选中的上游Observable的值，而index就是这个值在上游Observable中的序号，这个resultSelector只是简单地把value和index组成一个数组返回。如果直接return value就说明没有任何的转化。</p>
 <p>因为有结果选择器的存在，所有这类操作符有时不止能做过滤的工作，还能发挥转化的作用。<br>
         
           <a class="article-more-a" href="/2020/06/01/过滤操作符/#more">more >></a>
@@ -457,78 +529,6 @@
 
 
   
-    <article id="post-合并数据流" class="article article-type-post  article-index" itemscope="" itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2020/05/14/合并数据流/">合并数据流</a>
-    </h1>
-  
-
-        
-        <a href="/2020/05/14/合并数据流/" class="archive-article-date">
-  	<time datetime="2020-05-14T07:18:15.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-05-14</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h1 id="合并类操作符"><a href="#合并类操作符" class="headerlink" title="合并类操作符"></a>合并类操作符</h1><p>合并类的操作符都有多个Observable对象作为数据来源，把不同来源的数据根据不同的规则合并到一个Observable对象中。</p>
-        
-          <a class="article-more-a" href="/2020/05/14/合并数据流/#more">more >></a>
-        
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">rxjs</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
   
     <nav id="page-nav">
       <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="page-number" href="/page/3/">3</a><span class="space">&hellip;</span><a class="page-number" href="/page/7/">7</a><a class="extend next" rel="next" href="/page/2/">Next &raquo;</a>
@@ -618,11 +618,11 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
           <ul class="article-tag-list" q-show="showTags">
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">CSS</a>
+                <a href="javascript:void(0)" class="js-tag color2">Docker</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">Docker</a>
+                <a href="javascript:void(0)" class="js-tag color4">CSS</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -630,19 +630,7 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">JS</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">html</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">基础知识</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">rxjs</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -650,11 +638,23 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">版本控制</a>
+                <a href="javascript:void(0)" class="js-tag color5">基础知识</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">JS</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">rxjs</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">java</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">版本控制</a>
               </li>
              
               <li class="article-tag-list-item">

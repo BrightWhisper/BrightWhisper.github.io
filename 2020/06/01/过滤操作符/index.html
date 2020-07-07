@@ -8,19 +8,19 @@
   <link rel="dns-prefetch" href="http://yoursite.com">
   <title>过滤操作符 | 時の光</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="过滤操作符的模式过滤操作符最基本的功能就是对一个给定的数据流中的每个数据判断是否满足某个条件，如果满足条件就可以传递给下游，否则就抛弃掉。 几乎所有的过滤操作符都有判定函数参数，此外，有的过滤操作符还可以接受一个结果选择器(result selector)。它的作用是定制传给下游的数据，下面是一个”结果选择器”函数的例子 123function resultSelector(value,index">
+  <meta name="description" content="过滤操作符的模式过滤操作符最基本的功能就是对一个给定的数据流中的每个数据判断是否满足某个条件，如果满足条件就可以传递给下游，否则就抛弃掉。 几乎所有的过滤操作符都有判定函数参数，此外，有的过滤操作符还可以接受一个结果选择器(result selector)。它的作用是定制传给下游的数据，下面是一个”结果选择器”函数的例子。 123function resultSelector(value,inde">
 <meta name="keywords" content="rxjs">
 <meta property="og:type" content="article">
 <meta property="og:title" content="过滤操作符">
 <meta property="og:url" content="http://yoursite.com/2020/06/01/过滤操作符/index.html">
 <meta property="og:site_name" content="時の光">
-<meta property="og:description" content="过滤操作符的模式过滤操作符最基本的功能就是对一个给定的数据流中的每个数据判断是否满足某个条件，如果满足条件就可以传递给下游，否则就抛弃掉。 几乎所有的过滤操作符都有判定函数参数，此外，有的过滤操作符还可以接受一个结果选择器(result selector)。它的作用是定制传给下游的数据，下面是一个”结果选择器”函数的例子 123function resultSelector(value,index">
+<meta property="og:description" content="过滤操作符的模式过滤操作符最基本的功能就是对一个给定的数据流中的每个数据判断是否满足某个条件，如果满足条件就可以传递给下游，否则就抛弃掉。 几乎所有的过滤操作符都有判定函数参数，此外，有的过滤操作符还可以接受一个结果选择器(result selector)。它的作用是定制传给下游的数据，下面是一个”结果选择器”函数的例子。 123function resultSelector(value,inde">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="http://yoursite.com/assets/rxjs/debounceTime.png">
-<meta property="og:updated_time" content="2020-06-13T13:56:37.334Z">
+<meta property="og:updated_time" content="2020-06-23T20:41:02.209Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="过滤操作符">
-<meta name="twitter:description" content="过滤操作符的模式过滤操作符最基本的功能就是对一个给定的数据流中的每个数据判断是否满足某个条件，如果满足条件就可以传递给下游，否则就抛弃掉。 几乎所有的过滤操作符都有判定函数参数，此外，有的过滤操作符还可以接受一个结果选择器(result selector)。它的作用是定制传给下游的数据，下面是一个”结果选择器”函数的例子 123function resultSelector(value,index">
+<meta name="twitter:description" content="过滤操作符的模式过滤操作符最基本的功能就是对一个给定的数据流中的每个数据判断是否满足某个条件，如果满足条件就可以传递给下游，否则就抛弃掉。 几乎所有的过滤操作符都有判定函数参数，此外，有的过滤操作符还可以接受一个结果选择器(result selector)。它的作用是定制传给下游的数据，下面是一个”结果选择器”函数的例子。 123function resultSelector(value,inde">
 <meta name="twitter:image" content="http://yoursite.com/assets/rxjs/debounceTime.png">
   
     <link rel="alternative" href="/atom.xml" title="時の光" type="application/atom+xml">
@@ -160,22 +160,22 @@
     <div class="article-entry" itemprop="articleBody">
       
         <h1 id="过滤操作符的模式"><a href="#过滤操作符的模式" class="headerlink" title="过滤操作符的模式"></a>过滤操作符的模式</h1><p>过滤操作符最基本的功能就是对一个给定的数据流中的每个数据判断是否满足某个条件，如果满足条件就可以传递给下游，否则就抛弃掉。</p>
-<p>几乎所有的过滤操作符都有判定函数参数，此外，有的过滤操作符还可以接受一个结果选择器(result selector)。它的作用是定制传给下游的数据，下面是一个”结果选择器”函数的例子</p>
+<p>几乎所有的过滤操作符都有判定函数参数，此外，有的过滤操作符还可以接受一个结果选择器(result selector)。它的作用是定制传给下游的数据，下面是一个”结果选择器”函数的例子。</p>
 <figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">resultSelector</span>(<span class="params">value,index</span>)</span>&#123;</span><br><span class="line">    <span class="keyword">return</span> [value,index];</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>其中value是被选中的上游Observable的值，而index就是这个值在上游Observable中的序号，这个resultSelector只是简单地把value和index组成一个数组返回。如果直接return value就说明没有任何的转化</p>
+<p>其中value是被选中的上游Observable的值，而index就是这个值在上游Observable中的序号，这个resultSelector只是简单地把value和index组成一个数组返回。如果直接return value就说明没有任何的转化。</p>
 <p>因为有结果选择器的存在，所有这类操作符有时不止能做过滤的工作，还能发挥转化的作用。<br><a id="more"></a></p>
 <h2 id="filter"><a href="#filter" class="headerlink" title="filter"></a>filter</h2><p>filter接受一个判定函数<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> source$ = range(<span class="number">1</span>, <span class="number">5</span>);</span><br><span class="line"><span class="keyword">const</span> even$ = source$.pipe(filter(<span class="function"><span class="params">x</span> =&gt;</span> x % <span class="number">2</span> === <span class="number">0</span>))</span><br><span class="line">even$.subscribe(<span class="built_in">console</span>.log, <span class="literal">null</span>, () =&gt; &#123;</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">'complete'</span>);</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure></p>
 <p>上面代码的结果是2,4,complete。<br>使用filter产生的Observable对象，产生数据的时机和上游是一致的，当上游产生数据的时候，只要这个数据满足判定条件，就会立即被同步传给下游。<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> source$ = interval(<span class="number">1000</span>);</span><br><span class="line"><span class="keyword">const</span> even$ = source$.pipe(filter(<span class="function"><span class="params">x</span> =&gt;</span> x % <span class="number">2</span> == <span class="number">0</span>))</span><br><span class="line">even$.subscribe(<span class="built_in">console</span>.log, <span class="literal">null</span>, () =&gt; &#123;</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">'complete'</span>)</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure></p>
 <p>比如上面的数据就会在第偶数秒的时候出现在下游。<br>filter并不支持”结果选择器”函数。所以真的只能做”过滤”的工作，不能做结果转化。</p>
 <h2 id="first"><a href="#first" class="headerlink" title="first"></a>first</h2><p>first可以没有判定函数参数，没有参数时相当于找上游Observable吐出的第一个数据。<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> source$ = <span class="keyword">of</span>(<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>, <span class="number">5</span>, <span class="number">6</span>);</span><br><span class="line"><span class="keyword">const</span> first$ = source$.pipe(first());</span><br><span class="line">first$.subscribe(<span class="built_in">console</span>.log)</span><br></pre></td></tr></table></figure></p>
 <p>上面代码输出1然后完结。</p>
-<p>假如给first一个判定函数，就会返回满足判定条件的第一个元素<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> source$ = <span class="keyword">of</span>(<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>, <span class="number">5</span>, <span class="number">6</span>);</span><br><span class="line"><span class="keyword">const</span> first$ = source$.pipe(first(<span class="function"><span class="params">x</span> =&gt;</span> x % <span class="number">2</span> === <span class="number">0</span>));</span><br><span class="line">first$.subscribe(<span class="built_in">console</span>.log)</span><br></pre></td></tr></table></figure></p>
+<p>假如给first一个判定函数，就会返回满足判定条件的第一个元素。<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> source$ = <span class="keyword">of</span>(<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>, <span class="number">5</span>, <span class="number">6</span>);</span><br><span class="line"><span class="keyword">const</span> first$ = source$.pipe(first(<span class="function"><span class="params">x</span> =&gt;</span> x % <span class="number">2</span> === <span class="number">0</span>));</span><br><span class="line">first$.subscribe(<span class="built_in">console</span>.log)</span><br></pre></td></tr></table></figure></p>
 <p>上面代码输出2。</p>
-<p>如果first的上游Observable完结时依然没有满足条件的数据，那么first就会向下游抛出一个error<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> source$ = <span class="keyword">of</span>(<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>, <span class="number">5</span>, <span class="number">6</span>);</span><br><span class="line"><span class="keyword">const</span> first$ = source$.pipe(first(<span class="function"><span class="params">x</span> =&gt;</span> x &lt; <span class="number">0</span>));</span><br><span class="line">first$.subscribe(<span class="built_in">console</span>.log, (err) =&gt; <span class="built_in">console</span>.log(err))</span><br></pre></td></tr></table></figure></p>
+<p>如果first的上游Observable完结时依然没有满足条件的数据，那么first就会向下游抛出一个error。<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> source$ = <span class="keyword">of</span>(<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>, <span class="number">5</span>, <span class="number">6</span>);</span><br><span class="line"><span class="keyword">const</span> first$ = source$.pipe(first(<span class="function"><span class="params">x</span> =&gt;</span> x &lt; <span class="number">0</span>));</span><br><span class="line">first$.subscribe(<span class="built_in">console</span>.log, (err) =&gt; <span class="built_in">console</span>.log(err))</span><br></pre></td></tr></table></figure></p>
 <p>上述代码就会输出一个EmptyError。</p>
-<p>但发生error有时并不是我们想要的结果，我们可以返回一个发生错误时的默认值，first的第二个可选参数能完成这一点<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> source$ = <span class="keyword">of</span>(<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>, <span class="number">5</span>, <span class="number">6</span>);</span><br><span class="line"><span class="keyword">const</span> first$ = source$.pipe(first(<span class="function"><span class="params">x</span> =&gt;</span> x &lt; <span class="number">0</span>, <span class="number">-1</span>));</span><br><span class="line">first$.subscribe(<span class="built_in">console</span>.log, (err) =&gt; <span class="built_in">console</span>.log(err))</span><br></pre></td></tr></table></figure></p>
+<p>但发生error有时并不是我们想要的结果，我们可以返回一个发生错误时的默认值，first的第二个可选参数能完成这一点。<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> source$ = <span class="keyword">of</span>(<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>, <span class="number">5</span>, <span class="number">6</span>);</span><br><span class="line"><span class="keyword">const</span> first$ = source$.pipe(first(<span class="function"><span class="params">x</span> =&gt;</span> x &lt; <span class="number">0</span>, <span class="number">-1</span>));</span><br><span class="line">first$.subscribe(<span class="built_in">console</span>.log, (err) =&gt; <span class="built_in">console</span>.log(err))</span><br></pre></td></tr></table></figure></p>
 <p>上述代码返回一个-1。</p>
-<h2 id="last"><a href="#last" class="headerlink" title="last"></a>last</h2><p>last操作符做的事情和first正好相反，找的是Observable中最后一个符合判定条件的数据。<br>它的参数和first基本一致<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> source$ = <span class="keyword">of</span>(<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>, <span class="number">5</span>, <span class="number">6</span>);</span><br><span class="line"><span class="keyword">const</span> first$ = source$.pipe(last(<span class="function"><span class="params">x</span> =&gt;</span> x % <span class="number">2</span> === <span class="number">0</span>, <span class="number">-1</span>));</span><br><span class="line">first$.subscribe(<span class="built_in">console</span>.log, (err) =&gt; <span class="built_in">console</span>.log(err))</span><br></pre></td></tr></table></figure></p>
+<h2 id="last"><a href="#last" class="headerlink" title="last"></a>last</h2><p>last操作符做的事情和first正好相反，找的是Observable中最后一个符合判定条件的数据。<br>它的参数和first基本一致。<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> source$ = <span class="keyword">of</span>(<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>, <span class="number">5</span>, <span class="number">6</span>);</span><br><span class="line"><span class="keyword">const</span> first$ = source$.pipe(last(<span class="function"><span class="params">x</span> =&gt;</span> x % <span class="number">2</span> === <span class="number">0</span>, <span class="number">-1</span>));</span><br><span class="line">first$.subscribe(<span class="built_in">console</span>.log, (err) =&gt; <span class="built_in">console</span>.log(err))</span><br></pre></td></tr></table></figure></p>
 <p>以上代码返回6，如果判定函数没有命中任何元素则返回-1。</p>
 <p>但它和first不一样的是，last一定要等到上游Observable完结的时候才吐出数据。</p>
 <h1 id="take类操作符"><a href="#take类操作符" class="headerlink" title="take类操作符"></a>take类操作符</h1><h2 id="take"><a href="#take" class="headerlink" title="take"></a>take</h2><p>take就是从上游拿数据，拿够了就完结，至于如何算”拿够”，由take参数决定，take只支持一个参数count，就是拿取上游数据的数目。<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> source$ = interval(<span class="number">1000</span>);</span><br><span class="line"><span class="keyword">const</span> taker$ = source$.pipe(take(<span class="number">3</span>));</span><br><span class="line">taker$.subscribe(<span class="built_in">console</span>.log, <span class="literal">null</span>, () =&gt; <span class="built_in">console</span>.log(<span class="string">'complete'</span>))</span><br></pre></td></tr></table></figure></p>
@@ -229,7 +229,9 @@
 <p> 这里source$会产生1000个不同的数据，flush每500s产生一个数据，数据的值不重要，但它会清空distinct以前挤压的一切数据。这意味着传给下游的数据不是整个上游唯一的了，而是固定时间段内唯一的。</p>
 <h2 id="distinctUntilChanged"><a href="#distinctUntilChanged" class="headerlink" title="distinctUntilChanged"></a>distinctUntilChanged</h2><p> 这个操作符的作用也是淘汰掉重复的数据，但distinctUntilChanged拿到一个数据是直接和上一个数据比较的。<br> <figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> source$ = <span class="keyword">of</span>(<span class="number">0</span>, <span class="number">1</span>, <span class="number">1</span>, <span class="number">2</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">1</span>, <span class="number">3</span>, <span class="number">3</span>);</span><br><span class="line"><span class="keyword">const</span> distinct$ = source$.pipe(distinctUntilChanged());</span><br><span class="line">distinct$.subscribe(<span class="built_in">console</span>.log);</span><br></pre></td></tr></table></figure></p>
 <p>上面的例子输出0,1,2,0,1,3。<br>distinctUntilChanged和distinct同样有一个可选参数用来比较两个对象是否相等。</p>
-<h2 id="distinctUntilKeyChanged"><a href="#distinctUntilKeyChanged" class="headerlink" title="distinctUntilKeyChanged"></a>distinctUntilKeyChanged</h2>
+<h2 id="distinctUntilKeyChanged"><a href="#distinctUntilKeyChanged" class="headerlink" title="distinctUntilKeyChanged"></a>distinctUntilKeyChanged</h2><p>这个操作符相当于distinctUntilChanged的简化，直接根据数据的某些字段来进行比较。<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> source$ = <span class="keyword">of</span>(</span><br><span class="line">    &#123; <span class="attr">name</span>: <span class="string">'rxjs'</span>, <span class="attr">version</span>: <span class="string">'v4'</span> &#125;,</span><br><span class="line">    &#123; <span class="attr">name</span>: <span class="string">'vue'</span>, <span class="attr">version</span>: <span class="string">'v6'</span> &#125;,</span><br><span class="line">    &#123; <span class="attr">name</span>: <span class="string">'vue'</span>, <span class="attr">version</span>: <span class="string">'v7'</span> &#125;,</span><br><span class="line">    &#123; <span class="attr">name</span>: <span class="string">'rxjs'</span>, <span class="attr">version</span>: <span class="string">'v5'</span> &#125;,</span><br><span class="line">);</span><br><span class="line"><span class="keyword">const</span> distinct$ = source$.pipe(distinctUntilKeyChanged(<span class="string">'name'</span>));</span><br><span class="line">distinct$.subscribe(<span class="built_in">console</span>.log);</span><br></pre></td></tr></table></figure></p>
+<p>上述代码用name字段淘汰重复数据，所以{ name: ‘vue’, version: ‘v7’ }被淘汰。<br>但这个操作符只能指定一个用来比较的字段，如果比较两个字段还是要用distinctUntilChanged加上compare参数。</p>
+
       
 
       
@@ -419,11 +421,11 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
           <ul class="article-tag-list" q-show="showTags">
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">CSS</a>
+                <a href="javascript:void(0)" class="js-tag color2">Docker</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">Docker</a>
+                <a href="javascript:void(0)" class="js-tag color4">CSS</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -431,19 +433,7 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">JS</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">html</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">基础知识</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">rxjs</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -451,11 +441,23 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">版本控制</a>
+                <a href="javascript:void(0)" class="js-tag color5">基础知识</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">JS</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">rxjs</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">java</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">版本控制</a>
               </li>
              
               <li class="article-tag-list-item">
