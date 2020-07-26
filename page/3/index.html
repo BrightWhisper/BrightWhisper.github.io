@@ -137,6 +137,215 @@
           <div id="js-content" class="content-ll">
             
   
+    <article id="post-rxjs入门" class="article article-type-post  article-index" itemscope="" itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2020/01/14/rxjs入门/">rxjs入门</a>
+    </h1>
+  
+
+        
+        <a href="/2020/01/14/rxjs入门/" class="archive-article-date">
+  	<time datetime="2020-01-14T03:28:33.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-01-14</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="RxJS中的基本概念"><a href="#RxJS中的基本概念" class="headerlink" title="RxJS中的基本概念"></a>RxJS中的基本概念</h1><p>RxJS有一些需要理解的基本概念</p>
+<ul>
+<li>Observable(可观察对象)</li>
+<li>Observer(观察者)</li>
+<li>Subscription(订阅)</li>
+<li>Operators(运营商)</li>
+<li>Subject</li>
+<li>Schedulers</li>
+</ul>
+<h1 id="Observable和Observer"><a href="#Observable和Observer" class="headerlink" title="Observable和Observer"></a>Observable和Observer</h1><p>observable是可观察对象，observer是观察者，连接二者的桥梁是subscribe函数</p>
+<p>RxJS中的数据流就是observerable对象，它实现了观察者模式和迭代者模式</p>
+<h2 id="观察者模式"><a href="#观察者模式" class="headerlink" title="观察者模式"></a>观察者模式</h2><p>观察者模式就是要解决在一个持续产生事件的系统中，如何分割功能，观察者模式将逻辑分为发布者(Publisher)和观察者(Observer),其中发布者只负责产生事件，它会通知所有注册过的观察者，不关心观察者如何处理这些事件，反之观察者可以被注册上某个发布者，只管接收事件后处理，不关心数据如何产生。</p>
+<p>在RxJS中，observerable就是一个发布者，它通过subscribe函数，可以把发布者和观察者(observer)连接起来</p>
+<p>于是在RxJS中，问题往往分为3步</p>
+<ol>
+<li>如何产生事件，这是发布者的问题(Observable)</li>
+<li>如何处理事件，这是观察者的责任(Observer)</li>
+<li>什么样的发布者关联什么样的观察者，就是何时调用subscribe</li>
+</ol>
+<h2 id="迭代器模式"><a href="#迭代器模式" class="headerlink" title="迭代器模式"></a>迭代器模式</h2><p>迭代器指的是能够遍历一个数据集合的对象，它的作用就是提供一个通用的接口，让使用者在不关心数据集合的具体实现方式的前提下遍历它</p>
+<p>迭代器也叫游标(cursor),就像一个移动的指针从集合的一个元素转移到另一个元素</p>
+<p>在RxJS中，可观察对象使用”推”的方式把数据推送给observer</p>
+<h2 id="创建Observable"><a href="#创建Observable" class="headerlink" title="创建Observable"></a>创建Observable</h2><p>综上，observable其实是一个发布者和迭代器的组合<br>下面是一个创建observable的示例<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> &#123; Observable &#125; <span class="keyword">from</span> <span class="string">'rxjs'</span>;</span><br><span class="line"><span class="keyword">const</span> onSubscribe = <span class="function"><span class="params">observer</span>=&gt;</span>&#123;</span><br><span class="line">  observer.next(<span class="number">1</span>);</span><br><span class="line">  observer.next(<span class="number">2</span>),</span><br><span class="line">  observer.next(<span class="number">3</span>)</span><br><span class="line">&#125;;</span><br><span class="line"><span class="keyword">const</span> source$ = <span class="keyword">new</span> Observable(onSubscribe)</span><br><span class="line"><span class="keyword">const</span> theObserver = &#123;</span><br><span class="line">  next: <span class="function"><span class="params">item</span>=&gt;</span> <span class="built_in">console</span>.log(item)</span><br><span class="line">&#125;</span><br><span class="line">source$.subscribe(theObserver);</span><br></pre></td></tr></table></figure></p>
+<p>这里相当于每当source$产生一个数据，就会通知观察者，调用theObserver的next方法。</p>
+<p>在RxJS中，observable是一个特殊类，接受一个处理observer的函数，observer就只是一个普通的对象，对它唯一的要求就是必须包含一个名为next的属性，这个属性的值是一个函数，用来接受处理推送过来的数据</p>
+<h2 id="两个小例子"><a href="#两个小例子" class="headerlink" title="两个小例子"></a>两个小例子</h2><ol>
+<li>每一秒推送一个数据<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> onSubscribe = <span class="function"><span class="params">observer</span> =&gt;</span> &#123;</span><br><span class="line">  <span class="keyword">let</span> number = <span class="number">1</span>;</span><br><span class="line">  <span class="keyword">const</span> handle = setInterval(<span class="function"><span class="params">()</span> =&gt;</span> &#123;</span><br><span class="line">    observer.next(number++)</span><br><span class="line">    <span class="keyword">if</span> (number &gt; <span class="number">3</span>) &#123;</span><br><span class="line">      clearInterval(handle)</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;, <span class="number">1000</span>)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<p>这个例子说明了一个问题，就是发布者发布数据是可以有时间间隔的，这样就使得异步操作十分容易，对于观察者来说，只要关心如何处理数据即可，不用关心何时处理数据</p>
+<ol start="2">
+<li>产生无穷多的数据<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> onSubscribe = <span class="function"><span class="params">observer</span> =&gt;</span>&#123;</span><br><span class="line">    <span class="keyword">let</span> number=<span class="number">1</span>;</span><br><span class="line">    <span class="keyword">const</span> handle = setInterval(<span class="function"><span class="params">()</span>=&gt;</span>&#123;</span><br><span class="line">        observer.next(number++);</span><br><span class="line">    &#125;,<span class="number">1000</span>)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<p>这里说明observable可以推送无穷多的数据，而且程序并不会消耗更多的内存，因为每次只推送一个数据，然后这个数据就会被observer消化处理</p>
+<p>相比遍历一个数组，这样的操作内存消耗是极小的</p>
+<p>现实中的数据流其实就是这样的，比如一个click事件，当它绑定的DOM元素消失之前，这个数据流是一直存在的</p>
+<h2 id="complete和error"><a href="#complete和error" class="headerlink" title="complete和error"></a>complete和error</h2><p>当然我们也可让Observerable推送有限的数据之后终止推送，但这个样子只是说不再调用next推送数据，observer并不知道，仍然占用着资源准备接收数据，所以我们还需要一个宣称observerable对象已经完结的方式，这就是observer的complete函数</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> onSubscribe=<span class="function"><span class="params">observer</span>=&gt;</span>&#123;</span><br><span class="line">    <span class="keyword">let</span> number = <span class="number">1</span>;</span><br><span class="line">    <span class="keyword">const</span> handle = setInterval(<span class="function"><span class="params">()</span>=&gt;</span>&#123;</span><br><span class="line">        observer.next(number++)；</span><br><span class="line">        <span class="keyword">if</span>(number &gt;<span class="number">3</span>)&#123;</span><br><span class="line">            clearInterval(handle);</span><br><span class="line">            observer.complete();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;)</span><br><span class="line">&#125; </span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> theObserve=&#123;</span><br><span class="line">    next: <span class="function"><span class="params">item</span>=&gt;</span><span class="built_in">console</span>.log(item),</span><br><span class="line">    complete: <span class="function"><span class="params">()</span>=&gt;</span><span class="built_in">console</span>.log(<span class="string">'No More Data'</span>)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>在observer定义了complete的动作之后，还是需要observable主动推送的，不推送就不会发生任何事情。</p>
+<p>在observable和observer的通信中，还需要一种表示出错的方式.observable在遇到异常情况的时候如果只是用complete,observer并不知道没有更多数据的原因是遭到了异常，所以我们需要一个error。<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> &#123;Observable&#125; <span class="keyword">from</span> <span class="string">'rxjs'</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> onSubscribe = <span class="function"><span class="params">observer</span> =&gt;</span> &#123;</span><br><span class="line">  observer.next(<span class="number">1</span>);</span><br><span class="line">  observer.error(<span class="string">'Someting Wrong'</span>);</span><br><span class="line">  observer.complete();</span><br><span class="line">&#125;;</span><br><span class="line"><span class="keyword">const</span> source$ = <span class="keyword">new</span> Observable(onSubscribe);</span><br><span class="line"><span class="keyword">const</span> theObserver = &#123;</span><br><span class="line">  next: <span class="function"><span class="params">item</span> =&gt;</span> <span class="built_in">console</span>.log(item),</span><br><span class="line">  error: <span class="function"><span class="params">err</span> =&gt;</span> <span class="built_in">console</span>.log(err),</span><br><span class="line">  complete: <span class="function"><span class="params">()</span> =&gt;</span> <span class="built_in">console</span>.log(<span class="string">'No More Data'</span>),</span><br><span class="line">&#125;;</span><br><span class="line">source$.subscribe(theObserver);</span><br></pre></td></tr></table></figure></p>
+<p>要注意的是这里observable只有一种终结状态，要么complete,要么error,onSubscribe的参数实际上式对theObserver的一种包装，所以即使强行调用observer.complete(),也是调不到的。</p>
+<h2 id="observer的简单形式"><a href="#observer的简单形式" class="headerlink" title="observer的简单形式"></a>observer的简单形式</h2><p>前面说到observer可以包含next,complete和error三个方法，如果我们不关心其中某种事件的话，也可以不实现对应的方法。比如对于一个永续的递增正整数序列，是没必要用complete的,如果不会产生异常，也是可以不写error的。但需要注意的是如果产生了异常，但是observer没有用error来接收这个异常，异常会被系统接住。系统接住异常的处理方式就是输出异常，然后程序退出。</p>
+<p>因为error往往是不可预料的，所以健壮的程序里面observer一般都会写error。</p>
+<p>而且一般我们也没有必要传建一个observer对象，subscribe也可以直接接受函数作为参数，第一个参数是next,第二个参数是error,第三个参数是complete。<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">source$.subscribe(</span><br><span class="line">  item=&gt;<span class="built_in">console</span>.log(item),</span><br><span class="line">  err=&gt; <span class="built_in">console</span>.log(err),</span><br><span class="line">  ()=&gt;<span class="built_in">console</span>.log(<span class="string">'No More Data'</span>)</span><br><span class="line">)</span><br></pre></td></tr></table></figure></p>
+<p>忽略err但需要complete的时候需要用null来占位<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">source$.subscribe(</span><br><span class="line">  item=&gt;<span class="built_in">console</span>.log(item),</span><br><span class="line">  <span class="literal">null</span>,</span><br><span class="line">  ()=&gt;<span class="built_in">console</span>.log(<span class="string">'No More Data'</span>)</span><br><span class="line">)</span><br></pre></td></tr></table></figure></p>
+<h2 id="退订Observable"><a href="#退订Observable" class="headerlink" title="退订Observable"></a>退订Observable</h2><p>有订阅我们自然也需要一个主动退订的方法，实际上onSubscribe函数是可以返回一个对象，对象上是可以有一个unsubscribe函数的<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> onSubscribe=<span class="function"><span class="params">observer</span>=&gt;</span>&#123;</span><br><span class="line">  <span class="keyword">let</span> number=<span class="number">1</span>;</span><br><span class="line">  <span class="keyword">const</span> handle=setInterval(<span class="function"><span class="params">()</span>=&gt;</span>&#123;</span><br><span class="line">    observer.next(number++);</span><br><span class="line">  &#125;,<span class="number">1000</span>);</span><br><span class="line">  <span class="keyword">return</span> &#123;</span><br><span class="line">    unsubscribe: <span class="function"><span class="params">()</span>=&gt;</span>&#123;</span><br><span class="line">      clearInterval(handle);</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> source$ = <span class="keyword">new</span> Observable(onSubscribe);</span><br><span class="line"><span class="keyword">const</span> subscription=source$.subscribe(<span class="function"><span class="params">item</span>=&gt;</span><span class="built_in">console</span>.log(item));</span><br><span class="line">setTimeout(<span class="function"><span class="params">()</span>=&gt;</span>&#123;</span><br><span class="line">  subscription.unsubscribe();</span><br><span class="line">&#125;,<span class="number">3500</span>)</span><br></pre></td></tr></table></figure></p>
+<p>unsubscribe的作用其实是断开了observable和observer之间的链接，断开之后无论observable如何推送，observer都不会收到数据，但observable不调用complete的话就不会结束，只不过不会再调用next,err,和complete了。实验了一下在调用了complete之后，observable中的定时函数还是会无限执行的。</p>
+<h2 id="Hot-Observable和Cold-Observable"><a href="#Hot-Observable和Cold-Observable" class="headerlink" title="Hot Observable和Cold Observable"></a>Hot Observable和Cold Observable</h2><p>observable只是一个数据流，如果只存在一个observer是比较简单的，多个observer会存在订阅时间差的问题。</p>
+<p>假设有两个observer,但它们不是同时订阅的，第一个observer订阅N秒之后，第二个observer才订阅，那么在这之间产生的数据，第二个observer是否要接收呢？其实不同场景我们是有不同的期望结果的。如果把接收这些数据叫做场景A，不接收叫做场景B，那么对于场景A，称这样的observable为Hot Observable,对于场景B,称之为Cold Observable。</p>
+<p>Cold Observable可以理解为对每一次subscribe都产生一个生产者，这个生产者产生的数据通过next传递给订阅的observer<br>Hot Observable可以理解为是一个独立于Observable对象的生产者，这个生产者和是否subscribe没有关系，subscribe只是让observer连接上生产者。</p>
+<h2 id="操作符"><a href="#操作符" class="headerlink" title="操作符"></a>操作符</h2><p>一个Observable对象就对应了一个数据流，实际生产中，如果每次都需要new一个Observable是非常麻烦的。</p>
+<p>而且对于复杂的问题，并不会创造一个流之后就直接subscribe一个observer,往往需要进行一系列的处理，这个处理的过程就是通过操作符实现的。最后observer只需要处理走到终点的数据。</p>
+<p>多个操作符就形成了RxJS中的数据管道。</p>
+<p>对于一个操作符而言，关心的只有它的上游和下游，而它的上游可能是一个数据源，也可能是其他操作符，它的下游可能是最终的观察者，也可能是另一个操作符。</p>
+<p>在RxJS中有一系列产生Observable的函数，它们有的凭空创造Observable对象，有个根据外部数据源产生Observable对象，更多的是根据其他的Observable中的数据来产生新的Observable对象，这个函数统称为操作符<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> onSubscribe = <span class="function"><span class="params">observer</span>=&gt;</span>&#123;</span><br><span class="line">  observer.next(<span class="number">1</span>);</span><br><span class="line">  observer.next(<span class="number">2</span>);</span><br><span class="line">  observer.next(<span class="number">3</span>);</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">const</span> source$ = Observable.create(onSubscribe);</span><br><span class="line">source$.pipe(map(<span class="function">(<span class="params">x:number</span>)=&gt;</span>x*x)).subscribe(<span class="built_in">console</span>.log);</span><br></pre></td></tr></table></figure></p>
+<p>这里的map就相当于为为source$中的每个值乘以自身，然后生成一个新的Observable。可以说学RxJS本质上就是学实用操作符</p>
+<h2 id="弹珠图"><a href="#弹珠图" class="headerlink" title="弹珠图"></a>弹珠图</h2><p>将流中的每一个数据抽象成弹珠，就可以用弹珠图的方式来表示一个数据流。<br>在弹珠图中，每个弹珠中间的间隔，代表的是吐出数据之间的时间间隔，这样能够很容易的看清Observable对象中的数据分布。<br>竖杠符号|代表数据流的完结，对应调用下游的complete函数<br>符号x代表数据流中的异常，对应调用下游的error函数，所以这两个符号是互斥的<br><img src="/assets/rxjs/danzhu.png" alt="map的弹珠图"></p>
+<p><a href="https://rxviz.com/" target="_blank" rel="noopener">https://rxviz.com/</a> 上可以编写任意Observable对象来查看弹珠图</p>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">rxjs</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
+    <article id="post-数据结构-树" class="article article-type-post  article-index" itemscope="" itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2019/05/31/数据结构-树/">数据结构-树</a>
+    </h1>
+  
+
+        
+        <a href="/2019/05/31/数据结构-树/" class="archive-article-date">
+  	<time datetime="2019-05-31T09:29:51.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-05-31</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="树"><a href="#树" class="headerlink" title="树"></a>树</h1><p>树是一种分层数据的抽象模型，是一种非顺序的数据结构，家谱就是典型的树的例子。</p>
+<h2 id="树的相关术语"><a href="#树的相关术语" class="headerlink" title="树的相关术语"></a>树的相关术语</h2><p>一个树结构包含一系列存在父子关系的节点。</p>
+<ul>
+<li>树顶部的节点叫做<strong>根节点</strong>。树中的每个元素都叫做<strong>节点</strong>，节点分为<strong>内部节点</strong>和<strong>外部节点</strong></li>
+<li>至少有一个子节点的节点被称为<strong>内部节点</strong>，没有子节点的节点被称为<strong>外部节点</strong>或<strong>叶节点</strong></li>
+<li>一个节点可以有<strong>祖先</strong>和<strong>后代</strong>。祖先包括了父节点，祖父节点等等。后代包括了子节点，孙子节点等等。</li>
+<li><strong>子树</strong>由节点和它的后代构成</li>
+<li>节点的一个属性叫做<strong>深度</strong>，节点的深度取决于它的祖先节点的数量，祖先节点有几个，它就属于第几层。</li>
+<li>树的高度取决于所有节点深度的最大值。一棵树也可以被分解为<strong>层级</strong>。根节点在第0层。</li>
+</ul>
+        
+          <a class="article-more-a" href="/2019/05/31/数据结构-树/#more">more >></a>
+        
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">数据结构</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
     <article id="post-数据结构-递归" class="article article-type-post  article-index" itemscope="" itemprop="blogPost">
   <div class="article-inner">
     
@@ -358,156 +567,9 @@
 
 
   
-    <article id="post-数据结构-链表" class="article article-type-post  article-index" itemscope="" itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2019/05/09/数据结构-链表/">数据结构-链表</a>
-    </h1>
-  
-
-        
-        <a href="/2019/05/09/数据结构-链表/" class="archive-article-date">
-  	<time datetime="2019-05-09T07:42:43.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-05-09</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h1 id="链表"><a href="#链表" class="headerlink" title="链表"></a>链表</h1><p>链表用来存储有序的元素集合，但不同于数组，链表中的元素在内存中并不是连续放置的。每个元素由一个存储元素本身的节点和指向下一个元素的引用(指针)组成</p>
-<p>相对于传统的数组，链表的好处在于添加或移除元素的时候不需要移动其他元素。<br>但是在数组中，我们可以直接访问任何位置的任何元素，而想要访问链表中间的一个元素的话，我们需要从头开始迭代链表，直到找到所在的元素。</p>
-<p>火车就是链表的一个很形象的例子。</p>
-<h2 id="链表的实现"><a href="#链表的实现" class="headerlink" title="链表的实现"></a>链表的实现</h2>
-        
-          <a class="article-more-a" href="/2019/05/09/数据结构-链表/#more">more >></a>
-        
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">数据结构</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-数据结构-队列与双端队列" class="article article-type-post  article-index" itemscope="" itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2019/05/03/数据结构-队列与双端队列/">数据结构-队列与双端队列</a>
-    </h1>
-  
-
-        
-        <a href="/2019/05/03/数据结构-队列与双端队列/" class="archive-article-date">
-  	<time datetime="2019-05-03T02:06:42.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-05-03</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>队列是遵循先进先出(FIFO)原则的一组有序的项。队列在尾部添加新元素，并从顶部移除元素。最新添加的元素必须在队尾</p>
-        
-          <a class="article-more-a" href="/2019/05/03/数据结构-队列与双端队列/#more">more >></a>
-        
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">数据结构</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
   
     <nav id="page-nav">
-      <a class="extend prev" rel="prev" href="/page/2/">&laquo; Prev</a><a class="page-number" href="/">1</a><a class="page-number" href="/page/2/">2</a><span class="page-number current">3</span><a class="page-number" href="/page/4/">4</a><a class="page-number" href="/page/5/">5</a><span class="space">&hellip;</span><a class="page-number" href="/page/7/">7</a><a class="extend next" rel="next" href="/page/4/">Next &raquo;</a>
+      <a class="extend prev" rel="prev" href="/page/2/">&laquo; Prev</a><a class="page-number" href="/">1</a><a class="page-number" href="/page/2/">2</a><span class="page-number current">3</span><a class="page-number" href="/page/4/">4</a><a class="page-number" href="/page/5/">5</a><span class="space">&hellip;</span><a class="page-number" href="/page/8/">8</a><a class="extend next" rel="next" href="/page/4/">Next &raquo;</a>
     </nav>
   
 
@@ -594,11 +656,15 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
           <ul class="article-tag-list" q-show="showTags">
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">Docker</a>
+                <a href="javascript:void(0)" class="js-tag color4">CSS</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">CSS</a>
+                <a href="javascript:void(0)" class="js-tag color5">java</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">Docker</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -610,10 +676,6 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">md</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">基础知识</a>
               </li>
              
@@ -622,15 +684,15 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">rxjs</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">java</a>
+                <a href="javascript:void(0)" class="js-tag color3">md</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">版本控制</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">rxjs</a>
               </li>
              
               <li class="article-tag-list-item">

@@ -24,7 +24,11 @@
 <meta property="og:image" content="http://yoursite.com/assets/rxjs/windowToggle.png">
 <meta property="og:image" content="http://yoursite.com/assets/rxjs/window.png">
 <meta property="og:image" content="http://yoursite.com/assets/rxjs/high-order%20map.png">
-<meta property="og:updated_time" content="2020-07-06T14:51:19.831Z">
+<meta property="og:image" content="http://yoursite.com/assets/rxjs/concatMap.png">
+<meta property="og:image" content="http://yoursite.com/assets/rxjs/mergeMap.png">
+<meta property="og:image" content="http://yoursite.com/assets/rxjs/switchMap.png">
+<meta property="og:image" content="http://yoursite.com/assets/rxjs/groupBy.png">
+<meta property="og:updated_time" content="2020-07-16T03:06:25.344Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="转化数据流">
 <meta name="twitter:description" content="本文会介绍rxjs对于数据的转化处理，也就是让数据管道中的数据发生变化。在rxjs中，过滤类，合并类和转化类的操作符是最常用的。">
@@ -206,7 +210,40 @@
 <p>project有两个参数，上游传来的数据和数据的索引编号。<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> source$ = interval(<span class="number">2000</span>);</span><br><span class="line"><span class="keyword">const</span> project = <span class="function">(<span class="params">value, index</span>) =&gt;</span> &#123;</span><br><span class="line">    <span class="keyword">return</span> interval(<span class="number">1000</span>).pipe(take(<span class="number">5</span>));</span><br><span class="line">&#125;;</span><br><span class="line"><span class="keyword">const</span> result$ = source$.pipe(map(project));</span><br></pre></td></tr></table></figure></p>
 <p><img src="/assets/rxjs/high-order map.png" alt="高阶map的弹珠图"><br>高阶map和普通map的不同就是它不只是把map直接丢给下游，而是把每个内部Observable中的数据做组合(也就是”拍平”)。传递给下游的仍然是一个一阶Observable对象。</p>
 <p>高阶map有concatMap,mergeMap,switchMap,exhauseMap四种，其实它们就是合并类操作符和map的结合。</p>
-<h2 id="concatMap"><a href="#concatMap" class="headerlink" title="concatMap"></a>concatMap</h2><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<h2 id="concatMap"><a href="#concatMap" class="headerlink" title="concatMap"></a>concatMap</h2><p>仍然使用上述的project描述concatMap。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> source$ = interval(<span class="number">2000</span>);</span><br><span class="line"><span class="keyword">const</span> project = <span class="function">(<span class="params">value, index</span>) =&gt;</span> &#123;</span><br><span class="line">    <span class="keyword">return</span> interval(<span class="number">1000</span>).pipe(take(<span class="number">5</span>));</span><br><span class="line">&#125;;</span><br><span class="line"><span class="keyword">const</span> result$ = source$.pipe(concatMap(project));</span><br><span class="line">result$.subscribe(<span class="built_in">console</span>.log);</span><br></pre></td></tr></table></figure>
+<p><img src="/assets/rxjs/concatMap.png" alt="concatMap的弹珠图"><br>可以看到上述过程中，第二个Observable排在第一个之后，且绝对不会和第一个的数据有所重合交叉。所以concat适合需要顺序连接不同Observable对象中数据的操作，有一个特别适合使用concatMap的例子，就是网页中的拖拽。</p>
+<p>假设分别使用mouseDone$,mouseUp$,mouseOut$,mouseMove$代表对应时间封装成的流，那么concatMap实现拖拽的流程大体如下:</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> drag$ = mouseDown$.pipe(concatMap(<span class="function"><span class="params">startEvent</span> =&gt;</span> &#123;</span><br><span class="line">    <span class="keyword">const</span> initLeft = box[<span class="string">'offsetLeft'</span>];</span><br><span class="line">    <span class="keyword">const</span> initTop = box[<span class="string">'offsetTop'</span>];</span><br><span class="line">    <span class="keyword">const</span> stop$ = merge(mouseUp$, mouseDown$);</span><br><span class="line">    <span class="keyword">return</span> mouseMove$.pipe(takeUntil(stop$), map(<span class="function"><span class="params">mouseEvent</span> =&gt;</span> &#123;</span><br><span class="line">    <span class="keyword">return</span> &#123;</span><br><span class="line">        x: mouseEvent.x - startEvent.x + initLeft,</span><br><span class="line">        y: mouseEvent.y - startEvent.y + initTop</span><br><span class="line">    &#125;;</span><br><span class="line">    &#125;));</span><br><span class="line">&#125;));</span><br><span class="line">drag$.subscribe(<span class="function"><span class="params">event</span> =&gt;</span> &#123;</span><br><span class="line">    box.style.left = event.x + <span class="string">'px'</span>;</span><br><span class="line">    box.style.top = event.y + <span class="string">'px'</span>;</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+<h2 id="mergeMap"><a href="#mergeMap" class="headerlink" title="mergeMap"></a>mergeMap</h2><p>mergeMap其实和上述concatMap的区别和mergeAll,concatAll的区别类似。<br><img src="/assets/rxjs/mergeMap.png" alt="mergeMap的弹珠图"></p>
+<p>可以看到它就是对上游数据的拍平操作。它能够解决异步操作的问题，最典型的场景就是对于ajax请求的场景。</p>
+<h2 id="switchMap"><a href="#switchMap" class="headerlink" title="switchMap"></a>switchMap</h2><p>mergeMap在处理ajax请求时候的一个弊端就是每一个上游数据都会引发调用ajax并把结果传递给下游。</p>
+<p>在一些场景下这种处理并不合适，比如联系点击获得某个github仓库的star数，用户预期的肯定是获得最新的数据，但因为ajax本身异步，所以会出现上一秒的star数后返回，造成数据不实的状况。</p>
+<p>switchMap和前两个操作符不同的地方在于，后产生的内部Observable对象的优先级比前面的高，也就是说只要新的内部Observable对象产生，就立即退订之前的内部Observable对象，改为从最新的内部Observable对象拿数据。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> project = <span class="function">(<span class="params">value, index</span>) =&gt;</span> &#123;</span><br><span class="line">    <span class="keyword">return</span> interval(<span class="number">1000</span>).pipe(take(<span class="number">5</span>));</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">const</span> source$ = interval(<span class="number">2000</span>).pipe(take(<span class="number">2</span>));</span><br><span class="line"><span class="keyword">const</span> result$ = source$.pipe(switchMap(project));</span><br><span class="line">result$.subscribe(<span class="built_in">console</span>.log);</span><br></pre></td></tr></table></figure>
+<p><img src="/assets/rxjs/switchMap.png" alt="switchMap的弹珠图"></p>
+<h2 id="exhaustMap"><a href="#exhaustMap" class="headerlink" title="exhaustMap"></a>exhaustMap</h2><p>exhaustMap和switchMap的策略正好相反，先产生的内部Observable总是优先级更高，后产生的Observable唯一被利用的情况就是之前的Observable已经完结。</p>
+<p>exhuastMap的实现是在前一次project调用的内部Observable完结之前，上游推送下来一个数据，是不会再去调用project的，自然也不会有Observable。</p>
+<h1 id="高阶MapTo"><a href="#高阶MapTo" class="headerlink" title="高阶MapTo"></a>高阶MapTo</h1><p>高阶MapTo有三个，分别是concatMapTo,mergeMapTo和switchMapTo<br>以concatMapTo为例</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> source$ = interval(<span class="number">2000</span>).pipe(take(<span class="number">2</span>));</span><br><span class="line"><span class="keyword">const</span> result$ = source$.pipe(concatMapTo(interval(<span class="number">1000</span>).pipe(take(<span class="number">5</span>))));</span><br><span class="line">result$.subscribe(<span class="built_in">console</span>.log);</span><br></pre></td></tr></table></figure>
+<p>它们的参数直接就是一个Observable对象，而非project函数。</p>
+<h1 id="数据分组"><a href="#数据分组" class="headerlink" title="数据分组"></a>数据分组</h1><p>一些场景下需要对数据进行分组，根据数据的特点放到不同的Observable对象中，它的作用和合并类操作符正好相反。</p>
+<p>回压控制类的操作符也提供数据分组的功能，比如window,但是window传输的总是连续的数据。实际情况中需要分组的数据可能是交叉出现的，比如在随机整数序列中分组奇数和偶数。window是做不到的。</p>
+<h2 id="groupBy"><a href="#groupBy" class="headerlink" title="groupBy"></a>groupBy</h2><p>groupBy输出一个高阶Observable对象，每个内部Observable包含上游满足某个条件的一系列数据。</p>
+<p>可以把groupBy看做一个分发器，对于上游推送下来的任何数据，检查数据的key值，如果第一次出现就产生一个新的Observable对象。如果已存在就把数据塞给对应的Observable对象。</p>
+<p>key值由groupBy第一个函数参数来定制。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> source$ = interval(<span class="number">1000</span>);</span><br><span class="line"><span class="keyword">const</span> groupBy$ = source$.pipe(groupBy(<span class="function"><span class="params">x</span> =&gt;</span> x % <span class="number">2</span>));</span><br></pre></td></tr></table></figure>
+<p><img src="/assets/rxjs/groupBy.png" alt="groupBy的弹珠图">;</p>
+<p>在上例中，函数取的是整数序列与2的余数，所以key值有0和1两种。偶数属于第一个Observable,奇数属于第二个。</p>
+<p>groupBy可以对DOM事件进行分组，例如对不同class的点击事件做不同处理的时候，可以用事件冒泡为它们的父级元素绑定click事件，然后根据group对不同class的DOM触发不同的事件函数。</p>
+<h2 id="partition"><a href="#partition" class="headerlink" title="partition"></a>partition</h2><p>groupBy在一些时候显得小题大做，比如整数分奇偶这类问题，第一个Observable代表奇数还是偶数，完全取决于上游数据先出现奇数还是偶数。而且实际上我们只需要两个Observable对象，却需要去处理一个高阶Observable对象。</p>
+<p>partition接收一个判定函数作为参数，对上游的每个数据进行判定，满足条件的放一个Observable对象，不满足的放另一个Observcable，它的返回值是一个数组，分别是上述两个Observable对象。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> source$ = interval(<span class="number">1000</span>);</span><br><span class="line"><span class="keyword">const</span> [even$, odd$] = partition(source$, x =&gt; x % <span class="number">2</span> === <span class="number">0</span>);</span><br></pre></td></tr></table></figure>
+<p>作为实例函数的partition已经被废弃了。上例中even$是接收偶数的Observable，odd$的接收奇数的Observable。</p>
+<h2 id="累计数据"><a href="#累计数据" class="headerlink" title="累计数据"></a>累计数据</h2><p>前面介绍的操作符每个上游数据之间都是独立的，这也很符合函数式编程的原则。<br>但有些时候我们传给下游的数据可能需要依赖之前的数据。这时我们就需要scan和mergeScan这种能够累计所有上游数据的操作符。</p>
+<h2 id="scan"><a href="#scan" class="headerlink" title="scan"></a>scan</h2><p>scan的用法很像reduce,它们的区别是scan对于上游每一个数据都产生一个规约结果，而reduce是对上游所有数据进行规约，reduce最多只给下游传递一个数据，如果上游不完结，就不会传递数据，而scan可以处理一个永不完结的Observable对象。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> source$ = interval(<span class="number">1000</span>);</span><br><span class="line"><span class="keyword">const</span> scan$ = source$.pipe(scan(<span class="function">(<span class="params">accumulation, value</span>) =&gt;</span> accumulation + value));</span><br></pre></td></tr></table></figure>
+<p>其中，scan的规约函数把规约值加上当前数据作为结果，每次上游产生数据，规约函数都会被调用，结果传递给下游。同时也会被scan保存，用于下次调用规约函数的规约参数。<br>scan操作符在需要维持应用状态的时候是一个首选的操作符，因为它一方面可以根据数据流持续更新这些状态，另一方面可以持续把更新的状态传给另一个数据流来做必要的处理。<br>而其他绝大多数操作符只是搬运数据，并不会记录状态。</p>
 
       
 
@@ -239,6 +276,15 @@
   
 <nav id="article-nav">
   
+    <a href="/2020/07/16/rxjs的异常错误处理/" id="article-nav-newer" class="article-nav-link-wrap">
+      <i class="icon-circle-left"></i>
+      <div class="article-nav-title">
+        
+          rxjs的异常错误处理
+        
+      </div>
+    </a>
+  
   
     <a href="/2020/06/24/java的包以及maven包管理/" id="article-nav-older" class="article-nav-link-wrap">
       <div class="article-nav-title">java的包以及maven包管理</div>
@@ -268,7 +314,7 @@
                 </span>
                 <span class="tooltip-content">
                     <div class="toc-article">
-                    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#映射数据"><span class="toc-number">1.</span> <span class="toc-text">映射数据</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#map"><span class="toc-number">1.1.</span> <span class="toc-text">map</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#mapTo"><span class="toc-number">1.2.</span> <span class="toc-text">mapTo</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#pluck"><span class="toc-number">1.3.</span> <span class="toc-text">pluck</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#无损回压控制"><span class="toc-number">2.</span> <span class="toc-text">无损回压控制</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#windowTime和bufferTime"><span class="toc-number">2.1.</span> <span class="toc-text">windowTime和bufferTime</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#windowCount和bufferCount"><span class="toc-number">2.2.</span> <span class="toc-text">windowCount和bufferCount</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#windowWhen和bufferWhen"><span class="toc-number">2.3.</span> <span class="toc-text">windowWhen和bufferWhen</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#windowToggle和bufferToggle"><span class="toc-number">2.4.</span> <span class="toc-text">windowToggle和bufferToggle</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#window和buffer"><span class="toc-number">2.5.</span> <span class="toc-text">window和buffer</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#高阶map"><span class="toc-number">3.</span> <span class="toc-text">高阶map</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#concatMap"><span class="toc-number">3.1.</span> <span class="toc-text">concatMap</span></a></li></ol></li></ol>
+                    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#映射数据"><span class="toc-number">1.</span> <span class="toc-text">映射数据</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#map"><span class="toc-number">1.1.</span> <span class="toc-text">map</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#mapTo"><span class="toc-number">1.2.</span> <span class="toc-text">mapTo</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#pluck"><span class="toc-number">1.3.</span> <span class="toc-text">pluck</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#无损回压控制"><span class="toc-number">2.</span> <span class="toc-text">无损回压控制</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#windowTime和bufferTime"><span class="toc-number">2.1.</span> <span class="toc-text">windowTime和bufferTime</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#windowCount和bufferCount"><span class="toc-number">2.2.</span> <span class="toc-text">windowCount和bufferCount</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#windowWhen和bufferWhen"><span class="toc-number">2.3.</span> <span class="toc-text">windowWhen和bufferWhen</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#windowToggle和bufferToggle"><span class="toc-number">2.4.</span> <span class="toc-text">windowToggle和bufferToggle</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#window和buffer"><span class="toc-number">2.5.</span> <span class="toc-text">window和buffer</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#高阶map"><span class="toc-number">3.</span> <span class="toc-text">高阶map</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#concatMap"><span class="toc-number">3.1.</span> <span class="toc-text">concatMap</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#mergeMap"><span class="toc-number">3.2.</span> <span class="toc-text">mergeMap</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#switchMap"><span class="toc-number">3.3.</span> <span class="toc-text">switchMap</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#exhaustMap"><span class="toc-number">3.4.</span> <span class="toc-text">exhaustMap</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#高阶MapTo"><span class="toc-number">4.</span> <span class="toc-text">高阶MapTo</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#数据分组"><span class="toc-number">5.</span> <span class="toc-text">数据分组</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#groupBy"><span class="toc-number">5.1.</span> <span class="toc-text">groupBy</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#partition"><span class="toc-number">5.2.</span> <span class="toc-text">partition</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#累计数据"><span class="toc-number">5.3.</span> <span class="toc-text">累计数据</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#scan"><span class="toc-number">5.4.</span> <span class="toc-text">scan</span></a></li></ol></li></ol>
                     </div>
                 </span>
             </div>
@@ -388,11 +434,15 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
           <ul class="article-tag-list" q-show="showTags">
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">Docker</a>
+                <a href="javascript:void(0)" class="js-tag color4">CSS</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">CSS</a>
+                <a href="javascript:void(0)" class="js-tag color5">java</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">Docker</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -404,10 +454,6 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">md</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">基础知识</a>
               </li>
              
@@ -416,15 +462,15 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">rxjs</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">java</a>
+                <a href="javascript:void(0)" class="js-tag color3">md</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">版本控制</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">rxjs</a>
               </li>
              
               <li class="article-tag-list-item">
